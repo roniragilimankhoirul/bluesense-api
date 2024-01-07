@@ -6,7 +6,6 @@ const register = async (req, res, next) => {
     request.name = req.body.name;
     request.uid = req.user.uid;
     request.email = req.user.email;
-    console.log(request);
     const result = await userService.register(request);
     res.status(200).json({
       data: result,

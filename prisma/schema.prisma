@@ -19,13 +19,25 @@ model User{
   photo_url String?  @db.Text
   created_at DateTime @db.Timestamptz() @default(now())
   updated_at DateTime @db.Timestamptz() @default(now())
+  device UserDevices[]
   @@map("users")
 }
 
 model Device{
   id String @db.VarChar(100) @id @default(uuid())
-  device_id String @db.VarChar(100)
-  mqtt_topic String? @db.VarChar(100)
-  base_mqtt_url String? @db.VarChar(100)
+  device_id String @unique @db.VarChar(100)
+  mqtt_topic String @db.VarChar(100)
+  mqtt_base_url String @db.VarChar(100)
+  users UserDevices[]
   @@map("devices")
+}
+
+model UserDevices{
+  id String @db.VarChar(100)  @default(uuid())
+  user_id String @db.VarChar(100)
+  device_id String @db.VarChar(100)
+  user User @relation(fields: [user_id], references: [id])
+  device Device @relation(fields: [device_id], references: [id])
+  @@id([id, user_id, device_id])
+  @@map("user_devices")
 }

@@ -15,4 +15,5 @@ publicRouter.post("/api/users/register", requireAuth, userController.register);
 publicRouter.get("/api/users", requireAuth, userController.get);
 
 publicRouter.post("/api/admin", adminController.createdDevice);
+publicRouter.get("/api/admin/data", adminController.get);
 export { publicRouter };

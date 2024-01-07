@@ -2,6 +2,7 @@ import express from "express";
 import userController from "../controller/user-controller.js";
 import requireAuth from "../middleware/auth-middleware.js";
 import adminController from "../controller/admin-controller.js";
+import deviceController from "../controller/device-controller.js";
 
 const publicRouter = new express.Router();
 
@@ -16,4 +17,6 @@ publicRouter.get("/api/users", requireAuth, userController.get);
 
 publicRouter.post("/api/admin", adminController.createdDevice);
 publicRouter.get("/api/admin/data", adminController.get);
+
+publicRouter.post("/api/devices", requireAuth, deviceController.register);
 export { publicRouter };

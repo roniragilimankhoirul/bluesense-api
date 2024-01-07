@@ -1,7 +1,10 @@
 import { prismaClient } from "../application/database.js";
 import { ResponseError } from "../error/response-error.js";
 import { validate } from "../helper/validation.js";
-import { registerDevice } from "../validation/device-validation.js";
+import {
+  deleteDeviceValidation,
+  registerDevice,
+} from "../validation/device-validation.js";
 
 const register = async (request) => {
   const device = validate(registerDevice, request);
@@ -55,6 +58,48 @@ const register = async (request) => {
   });
 };
 
+const deleteDeviceById = async (request) => {
+  const user = validate(deleteDeviceValidation, request);
+
+  const userInDatabase = await prismaClient.user.findUnique({
+    where: {
+      email: user.email,
+    },
+  });
+
+  if (!userInDatabase) {
+    throw new ResponseError(404, "User Not Found");
+  }
+
+  const userDeviceInDatabase = await prismaClient.userDevice.findUnique({
+    where: {
+      id: user.id,
+    },
+    include: {
+      device_detail: true,
+    },
+  });
+
+  if (!userDeviceInDatabase) {
+    throw new ResponseError(404, "UserDevice Not Found");
+  }
+
+  if (userDeviceInDatabase.device_detail) {
+    await prismaClient.deviceDetail.delete({
+      where: {
+        id: userDeviceInDatabase.device_detail.id,
+      },
+    });
+  }
+
+  await prismaClient.userDevice.delete({
+    where: {
+      id: userDeviceInDatabase.id,
+    },
+  });
+};
+
 export default {
   register,
+  deleteDeviceById,
 };

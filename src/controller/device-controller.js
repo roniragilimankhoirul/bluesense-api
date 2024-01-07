@@ -11,4 +11,17 @@ const register = async (req, res, next) => {
   }
 };
 
-export default { register };
+const deleteDeviceById = async (req, res, next) => {
+  try {
+    const request = {};
+    request.id = req.params.id;
+    request.email = req.user.email;
+    console.log(request);
+    const result = await deviceService.deleteDeviceById(request);
+    res.status(200).json({ message: "succes" });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default { register, deleteDeviceById };

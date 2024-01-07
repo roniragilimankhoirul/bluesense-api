@@ -10,4 +10,9 @@ const registerDevice = Joi.object({
   email: Joi.string().max(100).required(),
 });
 
-export { registerDevice };
+const deleteDeviceValidation = Joi.object({
+  id: Joi.string().max(100).required(),
+  email: Joi.string().max(100).required(),
+});
+
+export { registerDevice, deleteDeviceValidation };

@@ -19,6 +19,7 @@ publicRouter.post("/api/admin", adminController.createdDevice);
 publicRouter.get("/api/admin/data", adminController.get);
 
 publicRouter.post("/api/devices", requireAuth, deviceController.register);
+publicRouter.get("/api/devices", requireAuth, deviceController.getUserDevice);
 publicRouter.delete(
   "/api/devices/:id",
   requireAuth,

@@ -16,7 +16,6 @@ const deleteDeviceById = async (req, res, next) => {
     const request = {};
     request.id = req.params.id;
     request.email = req.user.email;
-    console.log(request);
     const result = await deviceService.deleteDeviceById(request);
     res.status(200).json({ message: "succes" });
   } catch (e) {
@@ -24,4 +23,16 @@ const deleteDeviceById = async (req, res, next) => {
   }
 };
 
-export default { register, deleteDeviceById };
+const getUserDevice = async (req, res, next) => {
+  try {
+    const request = {};
+    request.uid = req.user.uid;
+    request.email = req.user.email;
+    const result = await deviceService.getUserDevice(request);
+    res.status(200).json({ data: result });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default { register, deleteDeviceById, getUserDevice };

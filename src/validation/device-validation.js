@@ -15,4 +15,9 @@ const deleteDeviceValidation = Joi.object({
   email: Joi.string().max(100).required(),
 });
 
-export { registerDevice, deleteDeviceValidation };
+const getDeviceValidation = Joi.object({
+  uid: Joi.string().max(100).required(),
+  email: Joi.string().email().max(100).required(),
+});
+
+export { registerDevice, deleteDeviceValidation, getDeviceValidation };

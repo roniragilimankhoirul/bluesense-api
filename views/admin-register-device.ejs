@@ -91,8 +91,13 @@
   </head>
   <body>
     <div class="navbar">
-      <a href="admin-page.html">Register New Device</a>
-      <a href="admin-db.html">List Registered Device</a>
+      <a
+        href="https://bluesenseapi-1-l2019661.deta.app/api/admin/register-devices"
+        >Register New Device</a
+      >
+      <a href="https://bluesenseapi-1-l2019661.deta.app/api/admin/device-data"
+        >List Registered Device</a
+      >
     </div>
 
     <div class="header">
@@ -150,7 +155,7 @@
 
         document.getElementById("qrcode-container").style.display = "block";
 
-        fetch("http://localhost:3000/api/admin", {
+        fetch("https://bluesenseapi-1-l2019661.deta.app/api/admin", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -5,6 +5,8 @@ import cors from "cors";
 
 const app = express();
 app.use(express.json());
+app.set("view engine", "ejs");
+app.set("admin", "../../" + "/admin");
 app.use(cors());
 app.use(publicRouter);
 app.use(errorMiddleware);

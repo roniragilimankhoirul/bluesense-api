@@ -25,6 +25,11 @@ publicRouter.delete(
   requireAuth,
   deviceController.deleteDeviceById
 );
+publicRouter.post(
+  "/api/devices/logs",
+  requireAuth,
+  deviceController.createDeviceLogs
+);
 
 publicRouter.get("/api/admin/register-devices", (req, res) => {
   res.render("admin-register-device");

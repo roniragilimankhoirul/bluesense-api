@@ -30,6 +30,7 @@ model Device{
   mqtt_topic String @db.VarChar(100)
   mqtt_base_url String @db.VarChar(100)
   users UserDevice[]
+  log Log[]
   @@id([id])
   @@map("devices")
 }
@@ -58,4 +59,15 @@ model DeviceDetail{
   user_device_id String @unique
   @@map("device_details")
 
+}
+
+
+model Log{
+  id String @db.VarChar(100) @id @default(uuid())
+  ph Float 
+  tds Float
+  created_at DateTime @db.Timestamptz() @default(now())
+  device Device @relation(fields: [device_id], references: [id])
+  device_id String
+  @@map("logs")
 }

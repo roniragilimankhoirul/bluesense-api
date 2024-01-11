@@ -20,4 +20,16 @@ const getDeviceValidation = Joi.object({
   email: Joi.string().email().max(100).required(),
 });
 
-export { registerDevice, deleteDeviceValidation, getDeviceValidation };
+const createDeviceLogsValidation = Joi.object({
+  email: Joi.string().email().max(100).required(),
+  device_id: Joi.string().max(100).required(),
+  ph: Joi.number().required(),
+  tds: Joi.number().required(),
+});
+
+export {
+  registerDevice,
+  deleteDeviceValidation,
+  getDeviceValidation,
+  createDeviceLogsValidation,
+};

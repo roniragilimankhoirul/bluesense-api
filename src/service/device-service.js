@@ -3,6 +3,7 @@ import { prismaClient } from "../application/database.js";
 import { ResponseError } from "../error/response-error.js";
 import { validate } from "../helper/validation.js";
 import {
+  createDeviceLogsValidation,
   deleteDeviceValidation,
   getDeviceValidation,
   registerDevice,
@@ -19,14 +20,11 @@ const register = async (request) => {
     throw new ResponseError(404, "User Not Found");
   }
 
-  console.log(userInDatabase);
   const deviceInDatabase = await prismaClient.device.findUnique({
     where: {
       device_id: device.device_id,
     },
   });
-
-  console.log(deviceInDatabase);
 
   if (!deviceInDatabase) {
     throw new ResponseError(404, "Device Not Found");
@@ -124,8 +122,43 @@ const getUserDevice = async (request) => {
   });
 };
 
+const createDeviceLogs = async (request) => {
+  const user = validate(createDeviceLogsValidation, request);
+  const userInDatabase = await prismaClient.user.findUnique({
+    where: {
+      email: user.email,
+    },
+  });
+
+  if (!userInDatabase) {
+    throw new ResponseError(404, "User Not Found");
+  }
+
+  const deviceInDatabase = await prismaClient.device.findUnique({
+    where: {
+      device_id: user.device_id,
+    },
+  });
+  console.log(deviceInDatabase);
+  if (!deviceInDatabase) {
+    throw new ResponseError(404, "Device Not Found");
+  }
+  return await prismaClient.log.create({
+    data: {
+      ph: user.ph,
+      tds: user.tds,
+      device: {
+        connect: {
+          id: deviceInDatabase.id,
+        },
+      },
+    },
+  });
+};
+
 export default {
   register,
   deleteDeviceById,
   getUserDevice,
+  createDeviceLogs,
 };

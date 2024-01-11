@@ -45,6 +45,17 @@ CREATE TABLE "device_details" (
     CONSTRAINT "device_details_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "logs" (
+    "id" VARCHAR(100) NOT NULL,
+    "ph" DOUBLE PRECISION NOT NULL,
+    "tds" DOUBLE PRECISION NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "device_id" TEXT NOT NULL,
+
+    CONSTRAINT "logs_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -68,3 +79,6 @@ ALTER TABLE "user_devices" ADD CONSTRAINT "user_devices_device_id_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "device_details" ADD CONSTRAINT "device_details_user_device_id_fkey" FOREIGN KEY ("user_device_id") REFERENCES "user_devices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "logs" ADD CONSTRAINT "logs_device_id_fkey" FOREIGN KEY ("device_id") REFERENCES "devices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

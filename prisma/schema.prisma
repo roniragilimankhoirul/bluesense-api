@@ -52,6 +52,7 @@ model DeviceDetail{
   device_id String @db.VarChar(100) 
   name String @db.VarChar(100)
   province String @db.VarChar(100)
+  district String @db.VarChar(100)
   city String @db.VarChar(100)
   address String @db.VarChar(100)
   water_source String @db.VarChar(100)

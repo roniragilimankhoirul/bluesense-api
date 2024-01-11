@@ -46,4 +46,22 @@ const createDeviceLogs = async (req, res, next) => {
   }
 };
 
-export default { register, deleteDeviceById, getUserDevice, createDeviceLogs };
+const geteDeviceLogs = async (req, res, next) => {
+  try {
+    const request = {};
+    request.email = req.user.email;
+    request.device_id = req.params.device_id;
+    const result = await deviceService.getDeviceLogs(request);
+    res.status(200).json({ data: result });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default {
+  register,
+  deleteDeviceById,
+  getUserDevice,
+  createDeviceLogs,
+  geteDeviceLogs,
+};

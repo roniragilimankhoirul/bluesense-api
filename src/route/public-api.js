@@ -30,6 +30,11 @@ publicRouter.post(
   requireAuth,
   deviceController.createDeviceLogs
 );
+publicRouter.get(
+  "/api/devices/logs/:device_id",
+  requireAuth,
+  deviceController.geteDeviceLogs
+);
 
 publicRouter.get("/api/admin/register-devices", (req, res) => {
   res.render("admin-register-device");

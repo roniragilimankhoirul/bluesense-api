@@ -5,6 +5,7 @@ const registerDevice = Joi.object({
   device_id: Joi.string().max(100).required(),
   province: Joi.string().max(100).required(),
   city: Joi.string().max(100).required(),
+  district: Joi.string().max(100).required(),
   address: Joi.string().max(100).required(),
   water_source: Joi.string().max(100).required(),
   email: Joi.string().max(100).required(),
@@ -26,10 +27,15 @@ const createDeviceLogsValidation = Joi.object({
   ph: Joi.number().required(),
   tds: Joi.number().required(),
 });
+const getDeviceLogsValidation = Joi.object({
+  email: Joi.string().email().max(100).required(),
+  device_id: Joi.string().max(100).required(),
+});
 
 export {
   registerDevice,
   deleteDeviceValidation,
   getDeviceValidation,
   createDeviceLogsValidation,
+  getDeviceLogsValidation,
 };

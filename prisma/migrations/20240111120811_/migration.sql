@@ -37,6 +37,7 @@ CREATE TABLE "device_details" (
     "device_id" VARCHAR(100) NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "province" VARCHAR(100) NOT NULL,
+    "district" VARCHAR(100) NOT NULL,
     "city" VARCHAR(100) NOT NULL,
     "address" VARCHAR(100) NOT NULL,
     "water_source" VARCHAR(100) NOT NULL,

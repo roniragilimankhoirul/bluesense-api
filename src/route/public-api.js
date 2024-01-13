@@ -37,7 +37,7 @@ publicRouter.get(
 );
 
 publicRouter.get(
-  "/api/devices/history/:device_id/:startDateTime?/:endDateTime?",
+  "/api/devices/history/:device_id/:time?",
   requireAuth,
   deviceController.geteDeviceLogsHistory
 );

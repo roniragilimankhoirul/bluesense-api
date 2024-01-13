@@ -62,8 +62,7 @@ const geteDeviceLogsHistory = async (req, res, next) => {
     const request = {};
     request.email = req.user.email;
     request.device_id = req.params.device_id;
-    request.startDateTime = req.params.startDateTime;
-    request.endDateTime = req.params.endDateTime;
+    request.time = req.params.time;
     const result = await deviceService.getDeviceLogsHistory(request);
     res.status(200).json({ data: result });
   } catch (e) {

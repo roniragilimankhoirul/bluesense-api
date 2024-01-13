@@ -259,10 +259,30 @@ const getDeviceLogsHistory = async (req) => {
     throw new ResponseError(404, "Device Not Found");
   }
 
-  const startDate = new Date(
-    request.startDateTime || new Date().setHours(0, 0, 0, 0)
-  );
-  const endDate = new Date(request.endDateTime || new Date());
+  let startDate, endDate;
+
+  switch (request.time) {
+    case "week":
+      startDate = new Date();
+      startDate.setDate(startDate.getDate() - 7);
+      endDate = new Date();
+      break;
+    case "month":
+      startDate = new Date(); // Set to today
+      startDate.setMonth(startDate.getMonth() - 1);
+      endDate = new Date();
+      break;
+    case "year":
+      startDate = new Date(); // Set to today
+      startDate.setFullYear(startDate.getFullYear() - 1);
+      endDate = new Date();
+      break;
+    default:
+      startDate = new Date(
+        request.startDateTime || new Date().setHours(0, 0, 0, 0)
+      );
+      endDate = new Date(request.endDateTime || new Date());
+  }
 
   const logs = await prismaClient.log.findMany({
     where: {

@@ -35,8 +35,7 @@ const getDeviceLogsValidation = Joi.object({
 const getDeviceLogsHistoryValidation = Joi.object({
   email: Joi.string().email().max(100).required(),
   device_id: Joi.string().max(100).required(),
-  startDateTime: Joi.string(),
-  endDateTime: Joi.string(),
+  time: Joi.string(),
 });
 
 export {

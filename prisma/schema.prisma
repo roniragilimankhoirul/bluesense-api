@@ -16,6 +16,7 @@ model User{
   name String? @db.VarChar(100)
   email String @unique @db.VarChar(100)
   firebase_id String @db.VarChar(100)
+  fcm_token String @db.VarChar(100)
   telp String? @unique @db.VarChar(20)
   photo_url String?  @db.Text
   created_at DateTime @db.Timestamptz() @default(now())

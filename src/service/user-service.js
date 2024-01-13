@@ -44,6 +44,7 @@ const register = async (request) => {
       name: user.name,
       email: user.email,
       firebase_id: firebaseUser.uid,
+      fcm_token: user.fcm_token,
       photo_url: `https://ui-avatars.com/api/?size=128&background=0D8ABC&color=fff&name=${encodeURIComponent(
         user.name
       )}`,

@@ -8,6 +8,7 @@ const registerUserValidation = Joi.object({
   uid: Joi.string().max(100).required(),
   name: Joi.string().max(100),
   email: Joi.string().email().max(100).required(),
+  fcm_token: Joi.string().max(100).required(),
 });
 
 const getUserValidation = Joi.object({

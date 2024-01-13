@@ -32,10 +32,18 @@ const getDeviceLogsValidation = Joi.object({
   device_id: Joi.string().max(100).required(),
 });
 
+const getDeviceLogsHistoryValidation = Joi.object({
+  email: Joi.string().email().max(100).required(),
+  device_id: Joi.string().max(100).required(),
+  startDateTime: Joi.string(),
+  endDateTime: Joi.string(),
+});
+
 export {
   registerDevice,
   deleteDeviceValidation,
   getDeviceValidation,
   createDeviceLogsValidation,
   getDeviceLogsValidation,
+  getDeviceLogsHistoryValidation,
 };

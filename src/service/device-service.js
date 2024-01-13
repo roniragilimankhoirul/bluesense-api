@@ -5,6 +5,7 @@ import { validate } from "../helper/validation.js";
 import {
   createDeviceLogsValidation,
   deleteDeviceValidation,
+  getDeviceLogsHistoryValidation,
   getDeviceLogsValidation,
   getDeviceValidation,
   registerDevice,
@@ -188,7 +189,6 @@ const getDeviceLogs = async (request) => {
     throw new ResponseError(404, "Device Not Found");
   }
 
-  // Fetch the latest log for the device
   const latestLog = await prismaClient.log.findFirst({
     where: {
       device_id: user.device_id,
@@ -236,10 +236,145 @@ const getDeviceLogs = async (request) => {
   return response;
 };
 
+const getDeviceLogsHistory = async (req) => {
+  const request = validate(getDeviceLogsHistoryValidation, req);
+
+  const userInDatabase = await prismaClient.user.findUnique({
+    where: {
+      email: request.email,
+    },
+  });
+
+  if (!userInDatabase) {
+    throw new ResponseError(404, "User Not Found");
+  }
+
+  const deviceInDatabase = await prismaClient.device.findUnique({
+    where: {
+      id: request.device_id,
+    },
+  });
+
+  if (!deviceInDatabase) {
+    throw new ResponseError(404, "Device Not Found");
+  }
+
+  const startDate = new Date(
+    request.startDateTime || new Date().setHours(0, 0, 0, 0)
+  );
+  const endDate = new Date(request.endDateTime || new Date());
+
+  const logs = await prismaClient.log.findMany({
+    where: {
+      device_id: request.device_id,
+      created_at: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+  });
+
+  if (logs.length === 0) {
+    return {
+      message: "No logs available for the specified time range",
+      average_ph: 0,
+      average_tds: 0,
+      min_ph: 0,
+      max_ph: 0,
+      min_tds: 0,
+      max_tds: 0,
+      average_quality: "Unknown",
+      average_status: "Unknown",
+      average_drinkable: "Unknown",
+      logs: [],
+    };
+  }
+
+  const totalLogs = logs.length;
+  const totalPh = logs.reduce((sum, log) => sum + log.ph, 0);
+  const totalTDS = logs.reduce((sum, log) => sum + log.tds, 0);
+
+  const averagePh = totalPh / totalLogs;
+  const averageTDS = totalTDS / totalLogs;
+
+  const minPh = Math.min(...logs.map((log) => log.ph));
+  const maxPh = Math.max(...logs.map((log) => log.ph));
+
+  const minTDS = Math.min(...logs.map((log) => log.tds));
+  const maxTDS = Math.max(...logs.map((log) => log.tds));
+
+  const averageStatus = calculateAverage(logs, (log) => getStatus(log));
+  const averageQuality = calculateAverage(logs, (log) => getQuality(log));
+  const averageDrinkable = calculateAverage(logs, (log) => getDrinkable(log));
+
+  const response = {
+    average_ph: averagePh,
+    average_tds: averageTDS,
+    min_ph: minPh,
+    max_ph: maxPh,
+    min_tds: minTDS,
+    max_tds: maxTDS,
+    average_quality: getQualityString(averageQuality),
+    average_status: getStatusString(averageStatus),
+    average_drinkable: getDrinkableString(averageDrinkable),
+    logs: logs.map((log) => ({
+      ph: log.ph,
+      tds: log.tds,
+      created_at: log.created_at.toISOString(),
+    })),
+  };
+
+  return response;
+};
+
+function calculateAverage(logs, getValue) {
+  const totalValue = logs.reduce((sum, log) => sum + getValue(log), 0);
+  return totalValue / logs.length;
+}
+
+function getStatus(log) {
+  const averageTDS = log.tds;
+  const averagePH = log.ph;
+
+  return !(averageTDS <= 1500 && averagePH >= 6.5 && averagePH <= 9.0) ||
+    !(averageTDS <= 500 && averagePH >= 6.5 && averagePH <= 8.5)
+    ? "buruk"
+    : "aman";
+}
+
+function getQuality(log) {
+  const averageTDS = log.tds;
+  const averagePH = log.ph;
+
+  return averageTDS > 1500 || averagePH < 6.5 || averagePH > 9.0
+    ? "buruk"
+    : "baik";
+}
+
+function getDrinkable(log) {
+  const averageTDS = log.tds;
+  const averagePH = log.ph;
+
+  return averageTDS > 500 || averagePH < 6.5 || averagePH > 8.5 ? "no" : "yes";
+}
+
+function getStatusString(value) {
+  return value === 1 ? "aman" : "buruk";
+}
+
+function getDrinkableString(value) {
+  return value === 1 ? "yes" : "no";
+}
+
+function getQualityString(value) {
+  return value === 1 ? "baik" : "buruk";
+}
+
 export default {
   register,
   deleteDeviceById,
   getUserDevice,
   createDeviceLogs,
   getDeviceLogs,
+  getDeviceLogsHistory,
 };

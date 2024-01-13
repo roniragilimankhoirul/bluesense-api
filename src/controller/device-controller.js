@@ -57,11 +57,24 @@ const geteDeviceLogs = async (req, res, next) => {
     next(e);
   }
 };
-
+const geteDeviceLogsHistory = async (req, res, next) => {
+  try {
+    const request = {};
+    request.email = req.user.email;
+    request.device_id = req.params.device_id;
+    request.startDateTime = req.params.startDateTime;
+    request.endDateTime = req.params.endDateTime;
+    const result = await deviceService.getDeviceLogsHistory(request);
+    res.status(200).json({ data: result });
+  } catch (e) {
+    next(e);
+  }
+};
 export default {
   register,
   deleteDeviceById,
   getUserDevice,
   createDeviceLogs,
   geteDeviceLogs,
+  geteDeviceLogsHistory,
 };

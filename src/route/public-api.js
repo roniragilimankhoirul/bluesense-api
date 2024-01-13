@@ -36,6 +36,12 @@ publicRouter.get(
   deviceController.geteDeviceLogs
 );
 
+publicRouter.get(
+  "/api/devices/history/:device_id/:startDateTime?/:endDateTime?",
+  requireAuth,
+  deviceController.geteDeviceLogsHistory
+);
+
 publicRouter.get("/api/admin/register-devices", (req, res) => {
   res.render("admin-register-device");
 });

@@ -32,10 +32,12 @@ const createWaterFilterValidation = Joi.object({
 });
 
 const getWaterSupplierValidation = Joi.string().email().required();
+const getWaterFilterValidation = Joi.string().email().required();
 
 export {
   createDeviceAdminValidation,
   createWaterSupplierValidation,
   createWaterFilterValidation,
   getWaterSupplierValidation,
+  getWaterFilterValidation,
 };

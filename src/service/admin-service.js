@@ -5,6 +5,7 @@ import {
   createDeviceAdminValidation,
   createWaterFilterValidation,
   createWaterSupplierValidation,
+  getWaterFilterValidation,
   getWaterSupplierValidation,
 } from "../validation/admin-validation.js";
 import { imagekit } from "../helper/upload_image.js";
@@ -109,6 +110,26 @@ const getWaterSupplier = async (request) => {
   }
   return await prismaClient.waterSupplier.findMany();
 };
+const getWaterFilter = async (request) => {
+  const email = validate(getWaterFilterValidation, request);
+
+  const userInDatabase = await prismaClient.user.findUnique({
+    where: {
+      email: email,
+    },
+  });
+
+  if (!userInDatabase) {
+    throw new ResponseError(404, "User Not Found");
+  }
+  const waterFilters = await prismaClient.waterFilter.findMany();
+  const serializedWaterFilters = waterFilters.map((filter) => ({
+    ...filter,
+    price: filter.price.toString(),
+  }));
+
+  return serializedWaterFilters;
+};
 
 export default {
   registerDevice,
@@ -116,6 +137,7 @@ export default {
   createWaterSupplier,
   createWaterFilter,
   getWaterSupplier,
+  getWaterFilter,
 };
 
 // const __filename = new URL(import.meta.url).pathname;

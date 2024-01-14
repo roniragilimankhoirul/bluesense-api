@@ -74,4 +74,9 @@ publicRouter.get(
   requireAuth,
   adminController.getWaterSupplier
 );
+publicRouter.get(
+  "/api/store/water-filters",
+  requireAuth,
+  adminController.getWaterFilter
+);
 export { publicRouter };

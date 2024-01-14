@@ -31,8 +31,11 @@ const createWaterFilterValidation = Joi.object({
   shoppe_url: Joi.string(),
 });
 
+const getWaterSupplierValidation = Joi.string().email().required();
+
 export {
   createDeviceAdminValidation,
   createWaterSupplierValidation,
   createWaterFilterValidation,
+  getWaterSupplierValidation,
 };

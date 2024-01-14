@@ -69,4 +69,9 @@ publicRouter.post(
   upload.single("image"),
   adminController.createWaterFilter
 );
+publicRouter.get(
+  "/api/store/water-suppliers",
+  requireAuth,
+  adminController.getWaterSupplier
+);
 export { publicRouter };

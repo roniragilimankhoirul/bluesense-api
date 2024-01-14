@@ -3,6 +3,7 @@ import { ResponseError } from "../error/response-error.js";
 import { validate } from "../helper/validation.js";
 import {
   createDeviceAdminValidation,
+  createWaterFilterValidation,
   createWaterSupplierValidation,
 } from "../validation/admin-validation.js";
 import { imagekit } from "../helper/upload_image.js";
@@ -61,10 +62,44 @@ const createWaterSupplier = async (file, request) => {
   });
 };
 
+const createWaterFilter = async (file, request) => {
+  const validatedRequest = validate(createWaterFilterValidation, request);
+
+  const waterFilerInDatabase = await prismaClient.waterFilter.count({
+    where: {
+      OR: [
+        {
+          tokopedia_url: validatedRequest.tokopedia_url,
+        },
+        {
+          shoppe_url: validatedRequest.shoppe_url,
+        },
+      ],
+    },
+  });
+
+  if (waterFilerInDatabase === 1) {
+    throw new ResponseError(409, "Already Exist");
+  }
+
+  const uploadResponse = await imagekit.upload({
+    file: file.buffer.toString("base64"),
+    fileName: `${validatedRequest.name}_photo.jpg`,
+  });
+
+  await prismaClient.waterFilter.create({
+    data: {
+      ...validatedRequest,
+      image_url: uploadResponse.url,
+    },
+  });
+};
+
 export default {
   registerDevice,
   get,
   createWaterSupplier,
+  createWaterFilter,
 };
 
 // const __filename = new URL(import.meta.url).pathname;

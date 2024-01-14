@@ -22,4 +22,17 @@ const createWaterSupplierValidation = Joi.object({
   // image_url: Joi.string().max(100).required(),
 });
 
-export { createDeviceAdminValidation, createWaterSupplierValidation };
+const createWaterFilterValidation = Joi.object({
+  name: Joi.string().max(100).required(),
+  price: Joi.number().required(),
+  rating: Joi.number().required(),
+  description: Joi.string().required(),
+  tokopedia_url: Joi.string(),
+  shoppe_url: Joi.string(),
+});
+
+export {
+  createDeviceAdminValidation,
+  createWaterSupplierValidation,
+  createWaterFilterValidation,
+};

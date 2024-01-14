@@ -28,5 +28,16 @@ const createWaterSupplier = async (req, res, next) => {
     next(e);
   }
 };
+const createWaterFilter = async (req, res, next) => {
+  try {
+    const request = req.body;
+    const file = req.file;
+    console.log(request);
+    const result = await adminService.createWaterFilter(file, request);
+    res.status(200).json({ message: "Success" });
+  } catch (e) {
+    next(e);
+  }
+};
 
-export default { createdDevice, get, createWaterSupplier };
+export default { createdDevice, get, createWaterSupplier, createWaterFilter };

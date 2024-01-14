@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Water Supplier Registration - Bluesense</title>
+    <title>Water Filter Registration - Bluesense</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -55,7 +55,18 @@
         margin-bottom: 20px;
       }
 
-      .form input[type="text"] {
+      .form input[type="text"],
+      .form input[type="number"] {
+        box-sizing: border-box;
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .form textarea {
         box-sizing: border-box;
         width: 100%;
         margin-bottom: 10px;
@@ -113,26 +124,46 @@
       >
     </div>
     <div class="header">
-      <h2>Water Supplier Registration</h2>
+      <h2>Water Filter Registration</h2>
     </div>
 
     <div id="waterSupplier" class="page">
       <div class="form">
-        <h1>Register Water Supplier</h1>
+        <h1>Register Water Filter</h1>
         <input type="text" id="name" name="name" placeholder="Name" required />
         <input
-          type="text"
-          id="category"
-          name="category"
-          placeholder="Category"
+          type="number"
+          id="price"
+          name="price"
+          placeholder="Price"
           required
         />
-        <input type="text" id="phone" name="phone" placeholder="Phone" />
+        <input
+          type="number"
+          id="rating"
+          name="rating"
+          placeholder="Rating"
+          step="0.1"
+          required
+        />
+        <textarea
+          id="description"
+          name="description"
+          placeholder="Description"
+          rows="4"
+          required
+        ></textarea>
         <input
           type="text"
-          id="instagram_url"
-          name="instagram_url"
-          placeholder="Instagram URL"
+          id="tokopedia_url"
+          name="tokopedia_url"
+          placeholder="Tokopedia URL"
+        />
+        <input
+          type="text"
+          id="shoppe_url"
+          name="shoppe_url"
+          placeholder="Shoppe URL"
         />
         <label for="image">Upload image of the product:</label>
         <input
@@ -170,20 +201,24 @@
 
       function registerWaterSupplier() {
         let name = document.getElementById("name").value;
-        let category = document.getElementById("category").value;
-        let phone = document.getElementById("phone").value;
-        let instagram_url = document.getElementById("instagram_url").value;
+        let price = document.getElementById("price").value;
+        let rating = document.getElementById("rating").value;
+        let description = document.getElementById("description").value;
+        let tokopedia_url = document.getElementById("tokopedia_url").value;
+        let shoppe_url = document.getElementById("shoppe_url").value;
         let image = document.getElementById("image").files[0];
 
         let formData = new FormData();
         formData.append("name", name);
-        formData.append("category", category);
-        formData.append("phone", phone);
-        formData.append("instagram_url", instagram_url);
+        formData.append("price", price);
+        formData.append("rating", rating);
+        formData.append("description", description);
+        formData.append("tokopedia_url", tokopedia_url);
+        formData.append("shoppe_url", shoppe_url);
         formData.append("image", image);
 
         fetch(
-          "https://bluesenseapi-1-l2019661.deta.app/api/admin/water-suppliers/",
+          "https://bluesenseapi-1-l2019661.deta.app/api/admin/water-filters/",
           {
             method: "POST",
             body: formData,

@@ -55,10 +55,18 @@ publicRouter.get("/api/admin/login", (req, res) => {
 publicRouter.get("/api/admin/register-water-suppliers", (req, res) => {
   res.render("admin-register-water-suppliers");
 });
+publicRouter.get("/api/admin/register-water-filters", (req, res) => {
+  res.render("admin-register-water-filters");
+});
 
 publicRouter.post(
-  "/api/admin/water-supplier",
+  "/api/admin/water-suppliers",
   upload.single("image"),
   adminController.createWaterSupplier
+);
+publicRouter.post(
+  "/api/admin/water-filters",
+  upload.single("image"),
+  adminController.createWaterFilter
 );
 export { publicRouter };

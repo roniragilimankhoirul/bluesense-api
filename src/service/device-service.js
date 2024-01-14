@@ -1,4 +1,3 @@
-import { request } from "express";
 import { prismaClient } from "../application/database.js";
 import { ResponseError } from "../error/response-error.js";
 import { validate } from "../helper/validation.js";
@@ -10,6 +9,7 @@ import {
   getDeviceValidation,
   registerDevice,
 } from "../validation/device-validation.js";
+import admin from "../helper/firebase.js";
 
 const register = async (request) => {
   const device = validate(registerDevice, request);
@@ -149,11 +149,12 @@ const createDeviceLogs = async (request) => {
       device_id: user.device_id,
     },
   });
-  console.log(deviceInDatabase);
+
   if (!deviceInDatabase) {
     throw new ResponseError(404, "Device Not Found");
   }
-  return await prismaClient.log.create({
+
+  const response = await prismaClient.log.create({
     data: {
       ph: user.ph,
       tds: user.tds,
@@ -164,6 +165,48 @@ const createDeviceLogs = async (request) => {
       },
     },
   });
+
+  const latestLog = await prismaClient.log.findFirst({
+    where: {
+      device_id: user.device_id,
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+
+  const averageTDS = latestLog ? latestLog.tds : 0;
+  const averagePH = latestLog ? latestLog.ph : 0;
+
+  let status = "aman";
+
+  if (
+    !(averageTDS <= 1500 && averagePH >= 6.5 && averagePH <= 9.0) ||
+    !(averageTDS <= 500 && averagePH >= 6.5 && averagePH <= 8.5)
+  ) {
+    status = "buruk";
+
+    const message = {
+      data: {
+        title: "Air Buruk!",
+        body: "Penting! Kualitas air saat ini menunjukkan tingkat yang tidak memadahi.",
+        time: latestLog.created_at,
+      },
+      topic: "Notification",
+    };
+
+    admin
+      .messaging()
+      .sendToTopic(deviceInDatabase.mqtt_topic, message)
+      .then((response) => {
+        console.log("Successfully sent message:", response);
+      })
+      .catch((error) => {
+        console.error("Error sending message:", error);
+      });
+  }
+
+  return response;
 };
 
 const getDeviceLogs = async (request) => {
@@ -268,12 +311,12 @@ const getDeviceLogsHistory = async (req) => {
       endDate = new Date();
       break;
     case "month":
-      startDate = new Date(); // Set to today
+      startDate = new Date();
       startDate.setMonth(startDate.getMonth() - 1);
       endDate = new Date();
       break;
     case "year":
-      startDate = new Date(); // Set to today
+      startDate = new Date();
       startDate.setFullYear(startDate.getFullYear() - 1);
       endDate = new Date();
       break;
@@ -341,6 +384,8 @@ const getDeviceLogsHistory = async (req) => {
       ph: log.ph,
       tds: log.tds,
       created_at: log.created_at.toISOString(),
+      quality: getQuality(log) === "baik" ? 1 : 0,
+      status: getStatus(log) === "aman" ? 1 : 0,
     })),
   };
 

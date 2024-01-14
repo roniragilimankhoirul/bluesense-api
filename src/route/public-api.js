@@ -48,4 +48,7 @@ publicRouter.get("/api/admin/register-devices", (req, res) => {
 publicRouter.get("/api/admin/device-data", (req, res) => {
   res.render("admin-device-data");
 });
+publicRouter.get("/api/admin/login", (req, res) => {
+  res.render("admin-login");
+});
 export { publicRouter };

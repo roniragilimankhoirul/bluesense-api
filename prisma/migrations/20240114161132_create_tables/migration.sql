@@ -57,6 +57,32 @@ CREATE TABLE "logs" (
     CONSTRAINT "logs_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "water_suppliers" (
+    "id" VARCHAR(100) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "category" VARCHAR(100) NOT NULL,
+    "phone" VARCHAR(15),
+    "instagram_url" VARCHAR(100),
+    "image_url" VARCHAR(100) NOT NULL,
+
+    CONSTRAINT "water_suppliers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "water_filters" (
+    "id" VARCHAR(100) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "price" BIGINT NOT NULL,
+    "rating" DOUBLE PRECISION NOT NULL,
+    "description" TEXT NOT NULL,
+    "tokopedia_url" VARCHAR(100),
+    "shoppe_url" VARCHAR(100),
+    "image_url" VARCHAR(100) NOT NULL,
+
+    CONSTRAINT "water_filters_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -71,6 +97,18 @@ CREATE UNIQUE INDEX "user_devices_id_key" ON "user_devices"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "device_details_user_device_id_key" ON "device_details"("user_device_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "water_suppliers_phone_key" ON "water_suppliers"("phone");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "water_suppliers_instagram_url_key" ON "water_suppliers"("instagram_url");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "water_filters_tokopedia_url_key" ON "water_filters"("tokopedia_url");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "water_filters_shoppe_url_key" ON "water_filters"("shoppe_url");
 
 -- AddForeignKey
 ALTER TABLE "user_devices" ADD CONSTRAINT "user_devices_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -3,6 +3,7 @@ import userController from "../controller/user-controller.js";
 import requireAuth from "../middleware/auth-middleware.js";
 import adminController from "../controller/admin-controller.js";
 import deviceController from "../controller/device-controller.js";
+import { upload } from "../helper/upload_image.js";
 
 const publicRouter = new express.Router();
 
@@ -51,4 +52,13 @@ publicRouter.get("/api/admin/device-data", (req, res) => {
 publicRouter.get("/api/admin/login", (req, res) => {
   res.render("admin-login");
 });
+publicRouter.get("/api/admin/register-water-suppliers", (req, res) => {
+  res.render("admin-register-water-suppliers");
+});
+
+publicRouter.post(
+  "/api/admin/water-supplier",
+  upload.single("image"),
+  adminController.createWaterSupplier
+);
 export { publicRouter };

@@ -90,6 +90,10 @@
       <a href="https://bluesenseapi-1-l2019661.deta.app/api/admin/device-data"
         >List Registered Device</a
       >
+      <a
+        href="https://bluesenseapi-1-l2019661.deta.app/api/admin/register-water-suppliers"
+        >Register Water Supplier</a
+      >
     </div>
 
     <div class="header">
@@ -129,7 +133,6 @@
 
           data.forEach((item) => {
             const row = document.createElement("tr");
-            // Adjust the property names based on your database schema
             row.innerHTML = `
               <td>${item.id}</td>
               <td>${item.device_id}</td>

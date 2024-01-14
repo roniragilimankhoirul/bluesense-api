@@ -186,24 +186,26 @@ const createDeviceLogs = async (request) => {
   ) {
     status = "buruk";
 
-    const message = {
-      data: {
-        title: "Air Buruk!",
-        body: "Penting! Kualitas air saat ini menunjukkan tingkat yang tidak memadahi.",
-        time: latestLog.created_at,
-      },
-      topic: "Notification",
-    };
+    if (latestLog) {
+      const message = {
+        data: {
+          title: "Air Buruk!",
+          body: "Penting! Kualitas air saat ini menunjukkan tingkat yang tidak memadahi.",
+          time: latestLog.created_at,
+        },
+        to: `/topics/${deviceInDatabase.device_id}`,
+      };
 
-    admin
-      .messaging()
-      .sendToTopic(deviceInDatabase.mqtt_topic, message)
-      .then((response) => {
-        console.log("Successfully sent message:", response);
-      })
-      .catch((error) => {
-        console.error("Error sending message:", error);
-      });
+      admin
+        .messaging()
+        .send(message)
+        .then((response) => {
+          console.log("Successfully sent message:", response);
+        })
+        .catch((error) => {
+          console.error("Error sending message:", error);
+        });
+    }
   }
 
   return response;

@@ -26,11 +26,7 @@ publicRouter.delete(
   requireAuth,
   deviceController.deleteDeviceById
 );
-publicRouter.post(
-  "/api/devices/logs",
-  requireAuth,
-  deviceController.createDeviceLogs
-);
+publicRouter.post("/api/devices/logs", deviceController.createDeviceLogs);
 publicRouter.get(
   "/api/devices/logs/:device_id",
   requireAuth,
@@ -75,8 +71,13 @@ publicRouter.get(
   adminController.getWaterSupplier
 );
 publicRouter.get(
-  "/api/store/water-filters",
+  "/api/store/water-filters/:featured?",
   requireAuth,
   adminController.getWaterFilter
+);
+publicRouter.get(
+  "/api/store/water-filters/details/:id",
+  requireAuth,
+  adminController.getWaterFilterById
 );
 export { publicRouter };

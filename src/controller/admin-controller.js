@@ -50,7 +50,21 @@ const getWaterSupplier = async (req, res, next) => {
 };
 const getWaterFilter = async (req, res, next) => {
   try {
-    const result = await adminService.getWaterFilter(req.user.email);
+    const request = {};
+    request.email = req.user.email;
+    request.featured = req.params.featured;
+    const result = await adminService.getWaterFilter(request);
+    res.status(200).json({ data: result });
+  } catch (e) {
+    next(e);
+  }
+};
+const getWaterFilterById = async (req, res, next) => {
+  try {
+    const request = {};
+    request.email = req.user.email;
+    request.id = req.params.id;
+    const result = await adminService.getWaterFilterById(request);
     res.status(200).json({ data: result });
   } catch (e) {
     next(e);
@@ -64,4 +78,5 @@ export default {
   createWaterFilter,
   getWaterSupplier,
   getWaterFilter,
+  getWaterFilterById,
 };

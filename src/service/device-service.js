@@ -134,16 +134,6 @@ const getUserDevice = async (request) => {
 
 const createDeviceLogs = async (request) => {
   const user = validate(createDeviceLogsValidation, request);
-  const userInDatabase = await prismaClient.user.findUnique({
-    where: {
-      email: user.email,
-    },
-  });
-
-  if (!userInDatabase) {
-    throw new ResponseError(404, "User Not Found");
-  }
-
   const deviceInDatabase = await prismaClient.device.findUnique({
     where: {
       device_id: user.device_id,

@@ -6,6 +6,7 @@ import {
   createWaterFilterValidation,
   createWaterSupplierValidation,
   getWaterFilterValidation,
+  getWaterFilterValidationById,
   getWaterSupplierValidation,
 } from "../validation/admin-validation.js";
 import { imagekit } from "../helper/upload_image.js";
@@ -111,24 +112,70 @@ const getWaterSupplier = async (request) => {
   return await prismaClient.waterSupplier.findMany();
 };
 const getWaterFilter = async (request) => {
-  const email = validate(getWaterFilterValidation, request);
+  const req = validate(getWaterFilterValidation, request);
 
   const userInDatabase = await prismaClient.user.findUnique({
     where: {
-      email: email,
+      email: req.email,
     },
   });
 
   if (!userInDatabase) {
     throw new ResponseError(404, "User Not Found");
   }
-  const waterFilters = await prismaClient.waterFilter.findMany();
+
+  const isFeatured = req.featured === "true";
+  let waterFilters;
+
+  if (isFeatured) {
+    const featuredFilter = await prismaClient.waterFilter.findFirst({
+      where: {
+        name: "Bluesense",
+      },
+    });
+
+    waterFilters = featuredFilter ? [featuredFilter] : [];
+  } else {
+    waterFilters = await prismaClient.waterFilter.findMany();
+  }
+
   const serializedWaterFilters = waterFilters.map((filter) => ({
     ...filter,
     price: filter.price.toString(),
   }));
 
   return serializedWaterFilters;
+};
+
+const getWaterFilterById = async (request) => {
+  const req = validate(getWaterFilterValidationById, request);
+
+  const userInDatabase = await prismaClient.user.findUnique({
+    where: {
+      email: req.email,
+    },
+  });
+
+  if (!userInDatabase) {
+    throw new ResponseError(404, "User Not Found");
+  }
+
+  const waterFilterInDatabase = await prismaClient.waterFilter.findUnique({
+    where: {
+      id: request.id,
+    },
+  });
+
+  if (!waterFilterInDatabase) {
+    throw new ResponseError(404, "Water Filter Not Found");
+  }
+
+  const serializedWaterFilter = {
+    ...waterFilterInDatabase,
+    price: waterFilterInDatabase.price.toString(),
+  };
+
+  return serializedWaterFilter;
 };
 
 export default {
@@ -138,6 +185,7 @@ export default {
   createWaterFilter,
   getWaterSupplier,
   getWaterFilter,
+  getWaterFilterById,
 };
 
 // const __filename = new URL(import.meta.url).pathname;

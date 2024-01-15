@@ -22,7 +22,6 @@ const getDeviceValidation = Joi.object({
 });
 
 const createDeviceLogsValidation = Joi.object({
-  email: Joi.string().email().max(100).required(),
   device_id: Joi.string().max(100).required(),
   ph: Joi.number().required(),
   tds: Joi.number().required(),

@@ -32,7 +32,15 @@ const createWaterFilterValidation = Joi.object({
 });
 
 const getWaterSupplierValidation = Joi.string().email().required();
-const getWaterFilterValidation = Joi.string().email().required();
+const getWaterFilterValidation = Joi.object({
+  email: Joi.string().email().required(),
+  featured: Joi.string(),
+});
+
+const getWaterFilterValidationById = Joi.object({
+  email: Joi.string().email().required(),
+  id: Joi.string(),
+});
 
 export {
   createDeviceAdminValidation,
@@ -40,4 +48,5 @@ export {
   createWaterFilterValidation,
   getWaterSupplierValidation,
   getWaterFilterValidation,
+  getWaterFilterValidationById,
 };

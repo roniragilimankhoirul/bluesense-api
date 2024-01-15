@@ -38,7 +38,6 @@ const getUserDevice = async (req, res, next) => {
 const createDeviceLogs = async (req, res, next) => {
   try {
     const request = req.body;
-    request.email = req.user.email;
     const result = await deviceService.createDeviceLogs(request);
     res.status(200).json({ data: result });
   } catch (e) {

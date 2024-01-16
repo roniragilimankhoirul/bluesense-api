@@ -10,6 +10,7 @@ import {
   registerDevice,
 } from "../validation/device-validation.js";
 import admin from "../helper/firebase.js";
+import "dotenv/config";
 
 const register = async (request) => {
   const device = validate(registerDevice, request);
@@ -139,7 +140,6 @@ const createDeviceLogs = async (request) => {
       device_id: user.device_id,
     },
   });
-
   if (!deviceInDatabase) {
     throw new ResponseError(404, "Device Not Found");
   }
@@ -158,12 +158,14 @@ const createDeviceLogs = async (request) => {
 
   const latestLog = await prismaClient.log.findFirst({
     where: {
-      device_id: user.device_id,
+      device_id: deviceInDatabase.id,
     },
     orderBy: {
       created_at: "desc",
     },
   });
+
+  console.log(latestLog);
 
   const averageTDS = latestLog ? latestLog.tds : 0;
   const averagePH = latestLog ? latestLog.ph : 0;
@@ -176,25 +178,30 @@ const createDeviceLogs = async (request) => {
   ) {
     status = "buruk";
 
-    if (latestLog) {
+    if (status === "buruk") {
       const message = {
-        data: {
-          title: "Air Buruk!",
-          body: "Penting! Kualitas air saat ini menunjukkan tingkat yang tidak memadahi.",
-          time: latestLog.created_at,
-        },
         to: `/topics/${deviceInDatabase.device_id}`,
+        notification: {
+          title: "Air Buruk!",
+          body: "Penting! Kualitas air saat ini menunjukkan tingkat yang tidak memadai.",
+          subTitle: new Date().toISOString(),
+        },
       };
-
-      admin
-        .messaging()
-        .send(message)
-        .then((response) => {
-          console.log("Successfully sent message:", response);
-        })
-        .catch((error) => {
-          console.error("Error sending message:", error);
-        });
+      console.log(message);
+      const fcmKey = process.env.FCM_KEY;
+      const apiUrl = "https://fcm.googleapis.com/fcm/send";
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: fcmKey,
+        },
+        body: JSON.stringify(message),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(`Failed to send FCM message: ${result.error}`);
+      }
     }
   }
 

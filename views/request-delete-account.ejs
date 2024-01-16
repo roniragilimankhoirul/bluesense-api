@@ -71,8 +71,14 @@
     <script>
       function sendDeleteRequest() {
         const userEmail = document.getElementById("userEmail").value;
-        const deleteLink = `mailto:bluesensebybyteteam@gmail.com?subject=Account Deletion Request&body=Please delete my account. My email: ${userEmail}`;
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
+        if (!emailPattern.test(userEmail)) {
+          alert("Please enter a valid email address.");
+          return;
+        }
+
+        const deleteLink = `mailto:bluesensebybyteteam@gmail.com?subject=Account Deletion Request&body=Please delete my account. My email: ${userEmail}`;
         window.location.href = encodeURI(deleteLink);
       }
     </script>

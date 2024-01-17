@@ -11,6 +11,7 @@ import {
 } from "../validation/device-validation.js";
 import admin from "../helper/firebase.js";
 import "dotenv/config";
+import fetch from "node-fetch";
 
 const register = async (request) => {
   const device = validate(registerDevice, request);

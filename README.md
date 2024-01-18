@@ -4,6 +4,65 @@
 
 The BlueSense API serves as a REST API application for the BlueSense project, an IoT and mobile application project designed for monitoring water quality.
 
+## Tech Stack
+
+This project utilizes several key technologies for its implementation and functionality. Here is a list of the technologies used:
+
+- **Express**: A web framework for Node.js used to build the server-side application.
+- **PostgreSQL**: A relational database management system used to store and manage data.
+- **Firebase Authentication**: An authentication service used for user management.
+- **FCM (Firebase Cloud Messaging)**: Used for sending push notifications to user devices.
+- **Nginx**: A web server used as a reverse proxy on Google Compute Engine to deploy this project.
+- **Google Compute Engine**: A virtual machine service from Google Cloud used for hosting and deploying the application.
+
+## Installation
+
+1. Clone this repository:
+
+```shell
+git clone https://github.com/BlueSense-by-ByteTeam/bluesense-api.git
+```
+
+2. Navigate to directory project:
+
+```shell
+cd bluesense-api/
+```
+
+3. Configure Environment Variables:
+
+Create a .env file at the root of your project and configure your Environment Variables.
+
+```
+DATABASE_URL="postgresql://postgres:password@localhost:5432/dots"
+PORT = 8080
+FCM_KEY="xxx"
+```
+
+4. Add firebase credentials:
+
+Download Firebase credentials from Firebase and rename it to _bluesense-api-firebase.json_, then place it in the root folder.
+
+5. Install dependencies:
+
+```shell
+npm install
+```
+
+6. Migrate Database:
+
+```shell
+npx prisma migrate deploy
+```
+
+7. Run application:
+
+```shell
+npm run start
+```
+
+Aplikasi akan berjalan di http://localhost:{port}.
+
 ## Endpoint
 
 ### Register User

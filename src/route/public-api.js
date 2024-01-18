@@ -57,6 +57,9 @@ publicRouter.get("/api/admin/register-water-filters", (req, res) => {
 publicRouter.get("/bluesense/request-delete-accounts", (req, res) => {
   res.render("request-delete-account");
 });
+publicRouter.get("/bluesense/playstore", (req, res) => {
+  res.render("playstore");
+});
 
 publicRouter.post(
   "/api/admin/water-suppliers",

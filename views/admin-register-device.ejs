@@ -91,21 +91,10 @@
   </head>
   <body>
     <div class="navbar">
-      <a
-        href="https://bluesenseapi-1-l2019661.deta.app/api/admin/register-devices"
-        >Register New Device</a
-      >
-      <a href="https://bluesenseapi-1-l2019661.deta.app/api/admin/device-data"
-        >List Registered Device</a
-      >
-      <a
-        href="https://bluesenseapi-1-l2019661.deta.app/api/admin/register-water-suppliers"
-        >Register Water Supplier</a
-      >
-      <a
-        href="https://bluesenseapi-1-l2019661.deta.app/api/admin/register-water-filters"
-        >Register Water Filter</a
-      >
+      <a href="/api/admin/register-devices">Register New Device</a>
+      <a href="/api/admin/device-data">List Registered Device</a>
+      <a href="/api/admin/register-water-suppliers">Register Water Supplier</a>
+      <a href="/api/admin/register-water-filters">Register Water Filter</a>
     </div>
     <div class="header">
       <h2>Bluesense Admin Page</h2>
@@ -162,7 +151,7 @@
 
         document.getElementById("qrcode-container").style.display = "block";
 
-        fetch("https://bluesenseapi-1-l2019661.deta.app/api/admin", {
+        fetch("/api/admin", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

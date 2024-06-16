@@ -83,21 +83,10 @@
   </head>
   <body>
     <div class="navbar">
-      <a
-        href="https://bluesenseapi-1-l2019661.deta.app/api/admin/register-devices"
-        >Register New Device</a
-      >
-      <a href="https://bluesenseapi-1-l2019661.deta.app/api/admin/device-data"
-        >List Registered Device</a
-      >
-      <a
-        href="https://bluesenseapi-1-l2019661.deta.app/api/admin/register-water-suppliers"
-        >Register Water Supplier</a
-      >
-      <a
-        href="https://bluesenseapi-1-l2019661.deta.app/api/admin/register-water-filters"
-        >Register Water Filter</a
-      >
+      <a href="/api/admin/register-devices">Register New Device</a>
+      <a href="/api/admin/device-data">List Registered Device</a>
+      <a href="/api/admin/register-water-suppliers">Register Water Supplier</a>
+      <a href="/api/admin/register-water-filters">Register Water Filter</a>
     </div>
 
     <div class="header">
@@ -126,7 +115,7 @@
         document.addEventListener("DOMContentLoaded", fetchData);
 
         function fetchData() {
-          fetch("https://bluesenseapi-1-l2019661.deta.app/api/admin/data") // Adjust the endpoint based on your server setup
+          fetch("/api/admin/data") // Adjust the endpoint based on your server setup
             .then((response) => response.json())
             .then((data) => displayData(data))
             .catch((error) => console.error("Error fetching data:", error));

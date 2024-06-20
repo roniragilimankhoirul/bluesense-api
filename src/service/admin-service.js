@@ -100,15 +100,15 @@ const createWaterFilter = async (file, request) => {
 
 const getWaterSupplier = async (request) => {
   const req = validate(getWaterSupplierValidation, request);
-  const userInDatabase = await prismaClient.user.findUnique({
-    where: {
-      email: req,
-    },
-  });
+  // const userInDatabase = await prismaClient.user.findUnique({
+  //   where: {
+  //     email: req,
+  //   },
+  // });
 
-  if (!userInDatabase) {
-    throw new ResponseError(404, "Not Found");
-  }
+  // if (!userInDatabase) {
+  //   throw new ResponseError(404, "Not Found");
+  // }
   return await prismaClient.waterSupplier.findMany();
 };
 const getWaterFilter = async (request) => {

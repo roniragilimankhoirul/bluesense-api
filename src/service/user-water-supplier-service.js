@@ -223,21 +223,23 @@ const getLogs = async (request) => {
 
 const getWaterSupplierAndLogs = async (request) => {
   try {
-    const waterSuppliers = await prismaClient.waterSupplier.findUnique({
+    const waterSupplier = await prismaClient.waterSupplier.findUnique({
       where: {
         id_user_water_supplier: request,
       },
     });
     const waterSupplierLogs = await prismaClient.waterSupplierLog.findMany();
 
-    const combinedData = waterSuppliers.map((supplier) => {
-      return {
-        ...supplier,
-        logs: waterSupplierLogs, // include all logs as a sub-array for each supplier
+    if (waterSupplier) {
+      const combinedData = {
+        ...waterSupplier,
+        logs: waterSupplierLogs,
       };
-    });
 
-    return combinedData;
+      return combinedData;
+    } else {
+      throw new Error("Water supplier not found");
+    }
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;

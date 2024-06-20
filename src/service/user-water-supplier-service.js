@@ -120,11 +120,11 @@ const login = async (request) => {
   }
 };
 
-const create = async (file, request) => {
+const create = async (request) => {
   const userCreateRequest = validate(createWaterSupplierValidation, request);
   try {
     const uploadResponse = await imagekit.upload({
-      file: file.buffer.toString("base64"),
+      file: userCreateRequest.image.buffer.toString("base64"),
       fileName: `${userCreateRequest.name}_photo.jpg`,
     });
     await prismaClient.waterSupplier.create({

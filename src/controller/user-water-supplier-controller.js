@@ -24,8 +24,8 @@ const create = async (req, res, next) => {
   try {
     const request = req.body;
     request.id = req.user.uid;
-    const file = req.file;
-    await userWaterSupplierService.create(file, request);
+    request.image = req.file;
+    await userWaterSupplierService.create(request);
     res.status(200).json({
       message: "Added new water supplier success",
     });

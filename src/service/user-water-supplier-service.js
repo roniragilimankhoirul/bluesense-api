@@ -158,7 +158,6 @@ const insert = async (fileBuffer) => {
           const ph = parseFloat(data.ph);
           const tds = parseInt(data.tds);
 
-          // Use date-fns to parse the custom date format
           const datetime = parse(data.datetime, "dd-MM-yyyy.HH:mm", new Date());
 
           if (isNaN(ph) || isNaN(tds) || isNaN(datetime.getTime())) {
@@ -222,4 +221,31 @@ const getLogs = async (request) => {
   });
 };
 
-export default { register, login, create, insert, get, getLogs };
+const getWaterSupplierAndLogs = async () => {
+  try {
+    const waterSuppliers = await prismaClient.waterSupplier.findMany();
+    const waterSupplierLogs = await prismaClient.waterSupplierLog.findMany();
+
+    const combinedData = waterSuppliers.map((supplier) => {
+      return {
+        ...supplier,
+        logs: waterSupplierLogs, // include all logs as a sub-array for each supplier
+      };
+    });
+
+    return combinedData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export default {
+  register,
+  login,
+  create,
+  insert,
+  get,
+  getLogs,
+  getWaterSupplierAndLogs,
+};

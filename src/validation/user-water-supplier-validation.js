@@ -19,10 +19,12 @@ const createWaterSupplierValidation = Joi.object({
   image: Joi.required(),
 });
 const getWaterSupplierValidation = Joi.string().required();
+const getLogsWaterSupplierValidation = Joi.string().required();
 
 export {
   registerUserWaterSupplierValidation,
   loginUserWaterSupplierValidation,
   createWaterSupplierValidation,
   getWaterSupplierValidation,
+  getLogsWaterSupplierValidation,
 };

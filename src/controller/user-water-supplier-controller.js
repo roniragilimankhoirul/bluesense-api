@@ -60,10 +60,23 @@ const get = async (req, res, next) => {
     next(e);
   }
 };
+
+const getLogs = async (req, res, next) => {
+  try {
+    const id = req.user.uid;
+    const result = await userWaterSupplierService.getLogs(id);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 export default {
   register,
   login,
   create,
   insert,
   get,
+  getLogs,
 };

@@ -4,6 +4,7 @@ import admin from "../helper/firebase.js";
 import { validate } from "../helper/validation.js";
 import {
   createWaterSupplierValidation,
+  getLogsWaterSupplierValidation,
   getWaterSupplierValidation,
   loginUserWaterSupplierValidation,
   registerUserWaterSupplierValidation,
@@ -212,4 +213,13 @@ const get = async (request) => {
   return userInDatabase;
 };
 
-export default { register, login, create, insert, get };
+const getLogs = async (request) => {
+  const user = validate(getLogsWaterSupplierValidation, request);
+  return await prismaClient.waterSupplierLog.findMany({
+    orderBy: {
+      datetime: "desc",
+    },
+  });
+};
+
+export default { register, login, create, insert, get, getLogs };

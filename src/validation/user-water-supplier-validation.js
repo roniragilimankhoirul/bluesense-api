@@ -16,6 +16,7 @@ const createWaterSupplierValidation = Joi.object({
   detail_location: Joi.string().required(),
   latitude: Joi.number().min(-90).max(90).required(),
   longitude: Joi.number().min(-180).max(180).required(),
+  image: Joi.required(),
 });
 
 export {

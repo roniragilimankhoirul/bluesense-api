@@ -4,6 +4,7 @@ import admin from "../helper/firebase.js";
 import { validate } from "../helper/validation.js";
 import {
   createWaterSupplierValidation,
+  getWaterSupplierValidation,
   loginUserWaterSupplierValidation,
   registerUserWaterSupplierValidation,
 } from "../validation/user-water-supplier-validation.js";
@@ -178,4 +179,17 @@ const insert = async (fileBuffer) => {
   return results;
 };
 
-export default { register, login, create, insert };
+const get = async (request) => {
+  const user = validate(getWaterSupplierValidation, request);
+  const userInDatabase = await prismaClient.waterSupplier.findUnique({
+    where: {
+      id_user_water_supplier: user,
+    },
+  });
+  if (!userInDatabase) {
+    throw new ResponseError(404, "User not Found");
+  }
+  return userInDatabase;
+};
+
+export default { register, login, create, insert, get };

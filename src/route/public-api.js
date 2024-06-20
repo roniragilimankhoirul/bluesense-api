@@ -106,4 +106,9 @@ publicRouter.post(
   requireAuth,
   userWaterSupplierController.insert
 );
+publicRouter.get(
+  "/api/water-suppliers/profile",
+  requireAuth,
+  userWaterSupplierController.get
+);
 export { publicRouter };

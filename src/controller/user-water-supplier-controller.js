@@ -44,9 +44,21 @@ const insert = async (req, res, next) => {
     next(e);
   }
 };
+const get = async (req, res, next) => {
+  try {
+    const id = req.user.uid;
+    const result = await userWaterSupplierService.get(id);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 export default {
   register,
   login,
   create,
   insert,
+  get,
 };

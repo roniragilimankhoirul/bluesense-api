@@ -18,9 +18,11 @@ const createWaterSupplierValidation = Joi.object({
   longitude: Joi.number().min(-180).max(180).required(),
   image: Joi.required(),
 });
+const getWaterSupplierValidation = Joi.string().required();
 
 export {
   registerUserWaterSupplierValidation,
   loginUserWaterSupplierValidation,
   createWaterSupplierValidation,
+  getWaterSupplierValidation,
 };

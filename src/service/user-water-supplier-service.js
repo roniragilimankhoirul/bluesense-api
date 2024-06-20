@@ -9,6 +9,9 @@ import {
 } from "../validation/user-water-supplier-validation.js";
 import fetch from "node-fetch";
 import { imagekit } from "../helper/upload_image.js";
+import csvParser from "csv-parser";
+import { BufferStream } from "../helper/stream.js";
+import { Readable } from "stream";
 
 const register = async (request) => {
   const userRequest = validate(registerUserWaterSupplierValidation, request);
@@ -138,4 +141,41 @@ const create = async (file, request) => {
     console.log(error);
   }
 };
-export default { register, login, create };
+
+const insert = async (fileBuffer) => {
+  const results = [];
+
+  const readableStream = Readable.from(fileBuffer);
+
+  await new Promise((resolve, reject) => {
+    readableStream
+      .pipe(csvParser())
+      .on("data", async (data) => {
+        try {
+          const ph = parseFloat(data.ph);
+          const tds = parseInt(data.tds);
+          const datetime = new Date(data.datetime);
+          await prismaClient.waterSupplierLog.create({
+            data: {
+              ph,
+              tds,
+              datetime,
+            },
+          });
+          results.push(data);
+        } catch (error) {
+          reject(error);
+        }
+      })
+      .on("end", () => {
+        resolve(results);
+      })
+      .on("error", (error) => {
+        reject(error);
+      });
+  });
+
+  return results;
+};
+
+export default { register, login, create, insert };

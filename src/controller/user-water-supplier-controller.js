@@ -33,8 +33,20 @@ const create = async (req, res, next) => {
     next(e);
   }
 };
+const insert = async (req, res, next) => {
+  try {
+    const file = req.file.buffer;
+    await userWaterSupplierService.insert(file);
+    res.status(200).json({
+      message: "Added CSV data success",
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 export default {
   register,
   login,
   create,
+  insert,
 };

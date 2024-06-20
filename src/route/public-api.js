@@ -100,4 +100,10 @@ publicRouter.post(
   requireAuth,
   userWaterSupplierController.create
 );
+publicRouter.post(
+  "/api/water-suppliers/csv",
+  upload.single("csv"),
+  requireAuth,
+  userWaterSupplierController.insert
+);
 export { publicRouter };

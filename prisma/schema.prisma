@@ -109,4 +109,12 @@ model UserWaterSupplier{
   @@map("user_water_suppliers")
 }
 
+model WaterSupplierLog{
+  id String @id @db.VarChar(100) @default(uuid())
+  ph Float
+  tds Float
+  datetime DateTime
+  @@map("water_supplier_logs")
+}
+
 

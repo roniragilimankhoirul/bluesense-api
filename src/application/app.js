@@ -6,6 +6,7 @@ import cors from "cors";
 const app = express();
 app.use(express.json());
 app.set("view engine", "ejs");
+// app.use(express.static(path.join(__dirname, 'public')));
 app.set("admin", "../../" + "/admin");
 app.use(cors());
 app.use(publicRouter);

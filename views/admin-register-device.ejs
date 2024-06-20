@@ -151,7 +151,7 @@
 
         document.getElementById("qrcode-container").style.display = "block";
 
-        fetch("/api/admin", {
+        fetch("https://bluesense-api.vercel.app/api/admin", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

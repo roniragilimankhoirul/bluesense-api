@@ -4,6 +4,7 @@ import requireAuth from "../middleware/auth-middleware.js";
 import adminController from "../controller/admin-controller.js";
 import deviceController from "../controller/device-controller.js";
 import { upload } from "../helper/upload_image.js";
+import userWaterSupplierController from "../controller/user-water-supplier-controller.js";
 
 const publicRouter = new express.Router();
 
@@ -85,5 +86,12 @@ publicRouter.get(
   "/api/store/water-filters/details/:id",
   requireAuth,
   adminController.getWaterFilterById
+);
+
+//UserWaterSupplier
+publicRouter.post("/api/water-suppliers", userWaterSupplierController.register);
+publicRouter.post(
+  "/api/water-suppliers/login",
+  userWaterSupplierController.login
 );
 export { publicRouter };

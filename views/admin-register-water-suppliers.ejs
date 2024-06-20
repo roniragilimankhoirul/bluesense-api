@@ -171,7 +171,7 @@
         formData.append("instagram_url", instagram_url);
         formData.append("image", image);
 
-        fetch("/api/admin/water-suppliers/", {
+        fetch("https://bluesense-api.vercel.app/api/admin/water-suppliers/", {
           method: "POST",
           body: formData,
         })

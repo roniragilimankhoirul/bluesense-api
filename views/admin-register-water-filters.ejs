@@ -206,7 +206,7 @@
         formData.append("shoppe_url", shoppe_url);
         formData.append("image", image);
 
-        fetch("/api/admin/water-filters/", {
+        fetch("https://bluesense-api.vercel.app/api/admin/water-filters/", {
           method: "POST",
           body: formData,
         })

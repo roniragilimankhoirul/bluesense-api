@@ -189,7 +189,8 @@ const createDeviceLogs = async (request) => {
         },
       };
       console.log(message);
-      const fcmKey = process.env.FCM_KEY;
+      const fcmKey =
+        "key=AAAAhZrqnNI:APA91bFIRHGE6bgwS-oFnkoeh43Z9LFQ-FvUzwz-4NJo2Uc2KjQHqjnOs4XVO8WbwPQwxcapWt1CrB0tbttSyeYB9KDUV5605ht7pSC-HeBHYAbDmjZoGYryxnIm_BWNGM3xFNO95Zf1";
       const apiUrl = "https://fcm.googleapis.com/fcm/send";
       const response = await fetch(apiUrl, {
         method: "POST",

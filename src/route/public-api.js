@@ -94,4 +94,10 @@ publicRouter.post(
   "/api/water-suppliers/login",
   userWaterSupplierController.login
 );
+publicRouter.post(
+  "/api/water-suppliers/create",
+  upload.single("image"),
+  requireAuth,
+  userWaterSupplierController.create
+);
 export { publicRouter };

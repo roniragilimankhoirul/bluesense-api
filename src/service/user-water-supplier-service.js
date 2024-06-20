@@ -3,10 +3,12 @@ import { ResponseError } from "../error/response-error.js";
 import admin from "../helper/firebase.js";
 import { validate } from "../helper/validation.js";
 import {
+  createWaterSupplierValidation,
   loginUserWaterSupplierValidation,
   registerUserWaterSupplierValidation,
 } from "../validation/user-water-supplier-validation.js";
 import fetch from "node-fetch";
+import { imagekit } from "../helper/upload_image.js";
 
 const register = async (request) => {
   const userRequest = validate(registerUserWaterSupplierValidation, request);
@@ -113,4 +115,27 @@ const login = async (request) => {
     throw new ResponseError(500, "Login failed");
   }
 };
-export default { register, login };
+
+const create = async (file, request) => {
+  const userCreateRequest = validate(createWaterSupplierValidation, request);
+  try {
+    const uploadResponse = await imagekit.upload({
+      file: file.buffer.toString("base64"),
+      fileName: `${userCreateRequest.name}_photo.jpg`,
+    });
+    await prismaClient.waterSupplier.create({
+      data: {
+        id_user_water_supplier: userCreateRequest.id,
+        latitude: userCreateRequest.latitude,
+        longitude: userCreateRequest.latitude,
+        detail_location: userCreateRequest.detail_location,
+        name: userCreateRequest.name,
+        phone: userCreateRequest.phone,
+        image_url: uploadResponse.url,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export default { register, login, create };

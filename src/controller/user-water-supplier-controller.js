@@ -20,7 +20,21 @@ const login = async (req, res, next) => {
     next(e);
   }
 };
+const create = async (req, res, next) => {
+  try {
+    const request = req.body;
+    request.id = req.user.uid;
+    const file = req.file;
+    await userWaterSupplierService.create(file, request);
+    res.status(200).json({
+      message: "Added new water supplier success",
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 export default {
   register,
   login,
+  create,
 };

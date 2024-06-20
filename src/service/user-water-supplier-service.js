@@ -11,8 +11,8 @@ import {
 import fetch from "node-fetch";
 import { imagekit } from "../helper/upload_image.js";
 import csvParser from "csv-parser";
-import { BufferStream } from "../helper/stream.js";
 import { Readable } from "stream";
+import { parse } from "date-fns";
 
 const register = async (request) => {
   const userRequest = validate(registerUserWaterSupplierValidation, request);
@@ -145,6 +145,7 @@ const create = async (request) => {
 
 const insert = async (fileBuffer) => {
   const results = [];
+  const errors = [];
 
   const readableStream = Readable.from(fileBuffer);
 
@@ -155,7 +156,14 @@ const insert = async (fileBuffer) => {
         try {
           const ph = parseFloat(data.ph);
           const tds = parseInt(data.tds);
-          const datetime = new Date(data.datetime);
+
+          // Use date-fns to parse the custom date format
+          const datetime = parse(data.datetime, "dd-MM-yyyy.HH:mm", new Date());
+
+          if (isNaN(ph) || isNaN(tds) || isNaN(datetime.getTime())) {
+            throw new ResponseError(400, "Invalid data format");
+          }
+
           await prismaClient.waterSupplierLog.create({
             data: {
               ph,
@@ -165,18 +173,30 @@ const insert = async (fileBuffer) => {
           });
           results.push(data);
         } catch (error) {
-          reject(error);
+          console.error("Error saving data for row:", data, error);
+          errors.push({
+            row: data,
+            error: error.message,
+          });
         }
       })
       .on("end", () => {
-        resolve(results);
+        resolve();
       })
       .on("error", (error) => {
-        reject(error);
+        console.error("Error parsing CSV:", error);
+        reject(new ResponseError(500, "Error parsing CSV file"));
       });
   });
 
-  return results;
+  if (errors.length > 0) {
+    console.error("Some rows failed to process:", errors);
+  }
+
+  return {
+    success: results,
+    errors: errors,
+  };
 };
 
 const get = async (request) => {

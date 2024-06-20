@@ -1,3 +1,4 @@
+import { ResponseError } from "../error/response-error.js";
 import userWaterSupplierService from "../service/user-water-supplier-service.js";
 const register = async (req, res, next) => {
   try {
@@ -36,9 +37,13 @@ const create = async (req, res, next) => {
 const insert = async (req, res, next) => {
   try {
     const file = req.file.buffer;
-    await userWaterSupplierService.insert(file);
+    if (!file) {
+      throw new ResponseError(404, "File not uploaded");
+    }
+    const result = await userWaterSupplierService.insert(file);
     res.status(200).json({
       message: "Added CSV data success",
+      data: result,
     });
   } catch (e) {
     next(e);

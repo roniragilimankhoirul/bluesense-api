@@ -117,7 +117,7 @@ publicRouter.get(
   userWaterSupplierController.getLogs
 );
 publicRouter.get(
-  "/api/users/water-suppliers/logs",
+  "/api/users/water-suppliers/logs/:id",
   requireAuth,
   userWaterSupplierController.getWaterSupplierAndLogs
 );

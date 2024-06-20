@@ -75,8 +75,8 @@ const getLogs = async (req, res, next) => {
 
 const getWaterSupplierAndLogs = async (req, res, next) => {
   try {
-    const id = req.user.uid;
-    const result = await userWaterSupplierService.getWaterSupplierAndLogs();
+    const id = req.params.id;
+    const result = await userWaterSupplierService.getWaterSupplierAndLogs(id);
     res.status(200).json({
       data: result,
     });

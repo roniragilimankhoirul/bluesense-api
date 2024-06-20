@@ -221,9 +221,13 @@ const getLogs = async (request) => {
   });
 };
 
-const getWaterSupplierAndLogs = async () => {
+const getWaterSupplierAndLogs = async (request) => {
   try {
-    const waterSuppliers = await prismaClient.waterSupplier.findMany();
+    const waterSuppliers = await prismaClient.waterSupplier.findUnique({
+      where: {
+        id_user_water_supplier: request,
+      },
+    });
     const waterSupplierLogs = await prismaClient.waterSupplierLog.findMany();
 
     const combinedData = waterSuppliers.map((supplier) => {
